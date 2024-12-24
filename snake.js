@@ -6,11 +6,16 @@ let snake = [{ x: 10, y: 10 }];
 let direction = { x: 0, y: 0 };
 let food = { x: 15, y: 15 };
 let score = 0;
-let speed = 150; // Speed in milliseconds
+let speed = 100; // Speed in milliseconds
+let autoControl = false; // Enable auto control for cheat code
 
 function gameLoop() {
+    if (autoControl) {
+        autoControlSnake();
+    }
     update();
     draw();
+    setTimeout(gameLoop, speed);
 }
 
 function update() {
@@ -76,6 +81,44 @@ function changeDirection(event) {
     }
 }
 
+function autoControlSnake() {
+    const head = snake[0];
+    const possibleMoves = [
+        { x: 0, y: -1 }, // Up
+        { x: 0, y: 1 },  // Down
+        { x: -1, y: 0 }, // Left
+        { x: 1, y: 0 }   // Right
+    ];
+
+    const safeMoves = possibleMoves.filter(move => {
+        const nextX = head.x + move.x;
+        const nextY = head.y + move.y;
+
+        // Check wall collision
+        if (nextX < 0 || nextX >= tileCount || nextY < 0 || nextY >= tileCount) {
+            return false;
+        }
+
+        // Check self-collision
+        return !snake.some(segment => segment.x === nextX && segment.y === nextY);
+    });
+
+    // Prioritize moving towards the food if safe
+    if (safeMoves.length > 0) {
+        // Sort safe moves by distance to food (Manhattan distance)
+        safeMoves.sort((a, b) => {
+            const distA = Math.abs(food.x - (head.x + a.x)) + Math.abs(food.y - (head.y + a.y));
+            const distB = Math.abs(food.x - (head.x + b.x)) + Math.abs(food.y - (head.y + b.y));
+            return distA - distB;
+        });
+
+        direction = safeMoves[0]; // Choose the best move
+    } else {
+        // If no safe moves are available (extremely rare), stop the snake
+        direction = { x: 0, y: 0 };
+    }
+}
+
 document.addEventListener('keydown', changeDirection);
 
-setInterval(gameLoop, speed);
+gameLoop();
