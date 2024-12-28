@@ -7,7 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="controls">
+        <label for="speed">Speed: </label>
+        <input type="range" id="speedRange" min="50" max="500" value="100" step="50">
+        <span id="speedDisplay">100ms</span>
+    </div>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <script src="snake.js"></script>
 </body>
+<style>
+   .controls {
+    margin: 10px 0;
+    text-align: center;
+   }
+   .controls label {
+    margin-right: 10px;
+   }
+</style>
 </html>

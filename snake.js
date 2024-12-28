@@ -1,3 +1,5 @@
+const speedRange = document.getElementById('speedRange');
+const speedDisplay = document.getElementById('speedDisplay');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const gridSize = 20;
@@ -6,8 +8,8 @@ let snake = [{ x: 10, y: 10 }];
 let direction = { x: 0, y: 0 };
 let food = { x: 15, y: 15 };
 let score = 0;
-let speed = 100; // Speed in milliseconds
-let autoControl = false; // Enable auto control for cheat code
+let speed = parseInt(speedRange.value); // Speed in milliseconds
+let autoControl = true; // Enable auto control for cheat code
 
 function gameLoop() {
     if (autoControl) {
@@ -52,6 +54,7 @@ function draw() {
 function resetGame() {
     snake = [{ x: 10, y: 10 }];
     direction = { x: 0, y: 0 };
+    food = { x: 15, y: 15 };
     score = 0;
 }
 
@@ -120,5 +123,8 @@ function autoControlSnake() {
 }
 
 document.addEventListener('keydown', changeDirection);
-
+speedRange.addEventListener('input', () => {
+    speed = parseInt(speedRange.value);
+    speedDisplay.textContent = speed;
+});
 gameLoop();
