@@ -129,3 +129,10 @@ speedRange.addEventListener('input', () => {
     speedDisplay.textContent = speed;
 });
 gameLoop();
+/*
+   tasks:
+     to make godmode work 
+        create a string varioble containing the godmode code
+        compare the string with the godmode code to the code the user has entered
+        place the cheat code on a funtion that will be called when the user enters the code
+*/
